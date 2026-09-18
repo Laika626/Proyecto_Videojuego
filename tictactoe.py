@@ -52,15 +52,21 @@ def floor(value):
 
 state = {'player': 0}
 players = [drawx, drawo]
+occupied = {}
 
 
 def tap(x, y):
     """Draw X or O in tapped square."""
     x = floor(x)
     y = floor(y)
+
+    if (x, y) in occupied:
+        return
+
     player = state['player']
     draw = players[player]
     draw(x, y)
+    occupied[(x, y)] = player
     update()
     state['player'] = not player
 
