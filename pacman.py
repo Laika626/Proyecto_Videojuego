@@ -19,6 +19,7 @@ path = Turtle(visible=False)
 writer = Turtle(visible=False)
 aim = vector(5, 0)
 pacman = vector(-40, -80)
+# Los fantasmas se mueven más rápido que Pacman.
 ghosts = [
     [vector(-180, 160), vector(8, 0)],
     [vector(-180, -160), vector(0, 8)],
@@ -26,6 +27,7 @@ ghosts = [
     [vector(100, -160), vector(-8, 0)],
 ]
 # fmt: off
+# Se modificó el tablero para cambiar el recorrido del juego.
 tiles = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
@@ -102,6 +104,7 @@ def world():
             square(x, y)
 
             if tile == 1:
+		# La comida ahora es naranja y de mayor tamaño.
                 path.up()
                 path.goto(x + 10, y + 10)
                 path.dot(6, 'orange')
