@@ -24,7 +24,7 @@ PAIRS = TOTAL // 2
 HALF = COLS * SIZE // 2
 
 tiles = list(range(PAIRS)) * 2
-state = {'mark': None}
+state = {'mark': None, 'pairs': 0}
 hide = [True] * TOTAL
 
 
@@ -59,6 +59,11 @@ def tap(x, y):
         return
 
     spot = index(x, y)
+
+    # a tile that is already face up should not count as a new pair
+    if not hide[spot]:
+        return
+
     mark = state['mark']
 
     if mark is None or mark == spot or tiles[mark] != tiles[spot]:
@@ -67,6 +72,7 @@ def tap(x, y):
         hide[spot] = False
         hide[mark] = False
         state['mark'] = None
+        state['pairs'] += 1
 
 
 def draw():
@@ -90,6 +96,12 @@ def draw():
         goto(x + SIZE / 2, y + SIZE / 2 - 22)
         color('black')
         write(tiles[mark], font=('Arial', 30, 'normal'), align='center')
+
+    # pairs found so far, written above the board
+    up()
+    goto(-HALF, HALF + 15)
+    color('black')
+    write('Pairs: {} of {}'.format(state['pairs'], PAIRS), font=('Arial', 16, 'bold'))
 
     update()
     ontimer(draw, 100)
