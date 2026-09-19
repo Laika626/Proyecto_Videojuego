@@ -1,20 +1,14 @@
-"""Tic Tac Toe
+"""Tres en Raya (Tic Tac Toe).
 
-Exercises
-
-1. Give the X and O a different color and width.
-2. What happens when someone taps a taken spot?
-3. How would you detect when someone has won?
-4. How could you create a computer player?
+Juego interactivo de gato desarrollado con el módulo turtle.
 """
 
 from turtle import *
-
 from freegames import line
 
 
 def grid():
-    """Draw tic-tac-toe grid."""
+    """Dibuja la cuadrícula del juego tres en raya."""
     line(-67, 200, -67, -200)
     line(67, 200, 67, -200)
     line(-200, -67, 200, -67)
@@ -22,7 +16,7 @@ def grid():
 
 
 def drawx(x, y):
-    """Dibuja al jugador X con grosor y dimensiones centradas en la celda."""
+    """Dibuja el símbolo del jugador X con color rojo y centrado."""
     color('firebrick')
     width(5)
     up()
@@ -36,7 +30,7 @@ def drawx(x, y):
 
 
 def drawo(x, y):
-    """Dibuja al jugador O con trazo grueso y centrado en la celda."""
+    """Dibuja el símbolo del jugador O con trazo azul grueso y centrado."""
     color('royal blue')
     width(5)
     up()
@@ -46,25 +40,29 @@ def drawo(x, y):
 
 
 def floor(value):
-    """Round value down to grid with square size 133."""
+    """Redondea el valor a la esquina inferior de la casilla correspondiente."""
     return ((value + 200) // 133) * 133 - 200
 
 
+# Estado del turno actual (0 para X, 1 para O)
 state = {'player': 0}
 players = [drawx, drawo]
-# Registro de coordenadas ocupadas para evitar movimientos duplicados
+
+# Diccionario para registrar casillas ocupadas: {(x, y): jugador}
 occupied = {}
 
+
 def check_game_over():
-"""Verifica combinaciones ganadoras (filas, columnas, diagonales) o empate."""    board = [
+    """Verifica si existe un ganador o si el tablero terminó en empate."""
+    board = [
         occupied.get((-200, 66)), occupied.get((-67, 66)), occupied.get((66, 66)),
         occupied.get((-200, -67)), occupied.get((-67, -67)), occupied.get((66, -67)),
         occupied.get((-200, -200)), occupied.get((-67, -200)), occupied.get((66, -200)),
     ]
     lines = [
-        (0, 1, 2), (3, 4, 5), (6, 7, 8),  # Filas
-        (0, 3, 6), (1, 4, 7), (2, 5, 8),  # Columnas
-        (0, 4, 8), (2, 4, 6),              # Diagonales
+        (0, 1, 2), (3, 4, 5), (6, 7, 8),  # Combinaciones horizontales
+        (0, 3, 6), (1, 4, 7), (2, 5, 8),  # Combinaciones verticales
+        (0, 4, 8), (2, 4, 6),              # Combinaciones diagonales
     ]
     for a, b, c in lines:
         if board[a] is not None and board[a] == board[b] == board[c]:
@@ -83,11 +81,13 @@ def check_game_over():
         write("¡Empate!", align='center', font=('Arial', 24, 'bold'))
         onscreenclick(None)
 
+
 def tap(x, y):
-    """Procesa el clic, valida disponibilidad de casilla y alterna turnos."""
+    """Procesa el clic en pantalla, valida casilla disponible y alterna turno."""
     x = floor(x)
     y = floor(y)
-    # Comprueba si la celda ya está en uso antes de marcarla
+
+    # Evita sobreescribir si la casilla ya fue seleccionada
     if (x, y) in occupied:
         return
 
