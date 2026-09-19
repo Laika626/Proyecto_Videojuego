@@ -22,7 +22,7 @@ def grid():
 
 
 def drawx(x, y):
-    """Draw X player."""
+    """Dibuja al jugador X con grosor y dimensiones centradas en la celda."""
     color('firebrick')
     width(5)
     up()
@@ -36,7 +36,7 @@ def drawx(x, y):
 
 
 def drawo(x, y):
-    """Draw O player."""
+    """Dibuja al jugador O con trazo grueso y centrado en la celda."""
     color('royal blue')
     width(5)
     up()
@@ -52,11 +52,11 @@ def floor(value):
 
 state = {'player': 0}
 players = [drawx, drawo]
+# Registro de coordenadas ocupadas para evitar movimientos duplicados
 occupied = {}
 
 def check_game_over():
-    """Verifica si hay un ganador o si el juego terminó en empate."""
-    board = [
+"""Verifica combinaciones ganadoras (filas, columnas, diagonales) o empate."""    board = [
         occupied.get((-200, 66)), occupied.get((-67, 66)), occupied.get((66, 66)),
         occupied.get((-200, -67)), occupied.get((-67, -67)), occupied.get((66, -67)),
         occupied.get((-200, -200)), occupied.get((-67, -200)), occupied.get((66, -200)),
@@ -84,10 +84,10 @@ def check_game_over():
         onscreenclick(None)
 
 def tap(x, y):
-    """Draw X or O in tapped square."""
+    """Procesa el clic, valida disponibilidad de casilla y alterna turnos."""
     x = floor(x)
     y = floor(y)
-
+    # Comprueba si la celda ya está en uso antes de marcarla
     if (x, y) in occupied:
         return
 
