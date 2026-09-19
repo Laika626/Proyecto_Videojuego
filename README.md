@@ -31,3 +31,20 @@ Memoria desarrollado en Python utilizando Turtle y Freegames.
 - Se cuenta y se muestra en pantalla el número de pares descubiertos.
 - Se detecta cuando todas las casillas se han destapado.
 - Se agregaron comentarios al código.
+
+---
+
+## Integrante:
+
+- Oscar Iván Ortíz Martínez - A01711237
+
+## Videojuego:
+
+TicTacToe desarrollado en Python utilizando Turtle y Freegames.
+
+## Modificaciones realizadas
+
+1. Modificación de tamaño, color y centrado de los símbolos "X" y "O".
+2. Validación lógica para impedir jugadas sobre casillas ocupadas.
+3. Lógica para determinar el fin de juego por victoria o empate.
+4. Se agregaron comentarios al código.
