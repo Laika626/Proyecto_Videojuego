@@ -103,6 +103,13 @@ def draw():
     color('black')
     write('Pairs: {} of {}'.format(state['pairs'], PAIRS), font=('Arial', 16, 'bold'))
 
+    # no tile is left face down once every pair has been found
+    if state['pairs'] == PAIRS:
+        up()
+        goto(0, -HALF - 45)
+        color('red')
+        write('You found them all!', font=('Arial', 14, 'bold'), align='center')
+
     update()
     ontimer(draw, 100)
 
