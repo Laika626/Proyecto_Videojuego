@@ -15,9 +15,17 @@ from turtle import *
 from freegames import path
 
 car = path('car.gif')
-tiles = list(range(32)) * 2
+# the original board was 8x8 with 50 pixel tiles, this one is 4x4 with
+# 100 pixel tiles so it still covers the whole 400x400 image
+COLS = 4
+SIZE = 100
+TOTAL = COLS * COLS
+PAIRS = TOTAL // 2
+HALF = COLS * SIZE // 2
+
+tiles = list(range(PAIRS)) * 2
 state = {'mark': None}
-hide = [True] * 64
+hide = [True] * TOTAL
 
 
 def square(x, y):
@@ -28,23 +36,28 @@ def square(x, y):
     color('black', 'white')
     begin_fill()
     for count in range(4):
-        forward(50)
+        forward(SIZE)
         left(90)
     end_fill()
 
 
 def index(x, y):
     """Convert (x, y) coordinates to tiles index."""
-    return int((x + 200) // 50 + ((y + 200) // 50) * 8)
+    return int((x + HALF) // SIZE + ((y + HALF) // SIZE) * COLS)
 
 
 def xy(count):
     """Convert tiles count to (x, y) coordinates."""
-    return (count % 8) * 50 - 200, (count // 8) * 50 - 200
+    return (count % COLS) * SIZE - HALF, (count // COLS) * SIZE - HALF
 
 
 def tap(x, y):
     """Update mark and hidden tiles based on tap."""
+    # the window is larger than the board now, so a click outside of it
+    # would fall out of the tiles list
+    if not (-HALF <= x < HALF and -HALF <= y < HALF):
+        return
+
     spot = index(x, y)
     mark = state['mark']
 
@@ -59,11 +72,12 @@ def tap(x, y):
 def draw():
     """Draw image and tiles."""
     clear()
+    up()  # keeps the move to the center from leaving a line behind
     goto(0, 0)
     shape(car)
     stamp()
 
-    for count in range(64):
+    for count in range(TOTAL):
         if hide[count]:
             x, y = xy(count)
             square(x, y)
@@ -73,16 +87,16 @@ def draw():
     if mark is not None and hide[mark]:
         x, y = xy(mark)
         up()
-        goto(x + 2, y)
+        goto(x + SIZE / 2, y + SIZE / 2 - 22)
         color('black')
-        write(tiles[mark], font=('Arial', 30, 'normal'))
+        write(tiles[mark], font=('Arial', 30, 'normal'), align='center')
 
     update()
     ontimer(draw, 100)
 
 
 shuffle(tiles)
-setup(420, 420, 370, 0)
+setup(COLS * SIZE + 120, COLS * SIZE + 120, 370, 0)
 addshape(car)
 hideturtle()
 tracer(False)
