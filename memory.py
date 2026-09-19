@@ -1,12 +1,12 @@
 """Memory, puzzle game of number pairs.
 
-Exercises:
+Modified for the final project by Miguel Huizache Vazquez, A01713936.
 
-1. Count and print how many taps occur.
-2. Decrease the number of tiles to a 4x4 grid.
-3. Detect when all tiles are revealed.
-4. Center single-digit tile.
-5. Use letters instead of tiles.
+Changes:
+
+1. The board went from 8x8 down to 4x4.
+2. The pairs that have been found are counted and shown on screen.
+3. The game notices when every tile has been turned over.
 """
 
 from random import *
@@ -14,7 +14,8 @@ from turtle import *
 
 from freegames import path
 
-car = path('car.gif')
+car = path('car.gif')  # picture hidden behind the tiles
+
 # the original board was 8x8 with 50 pixel tiles, this one is 4x4 with
 # 100 pixel tiles so it still covers the whole 400x400 image
 COLS = 4
@@ -23,9 +24,9 @@ TOTAL = COLS * COLS
 PAIRS = TOTAL // 2
 HALF = COLS * SIZE // 2
 
-tiles = list(range(PAIRS)) * 2
-state = {'mark': None, 'pairs': 0}
-hide = [True] * TOTAL
+tiles = list(range(PAIRS)) * 2  # every number shows up twice to make a pair
+state = {'mark': None, 'pairs': 0}  # 'mark' is the tile waiting for its match
+hide = [True] * TOTAL  # hide[i] stays True while tile i is face down
 
 
 def square(x, y):
@@ -66,9 +67,12 @@ def tap(x, y):
 
     mark = state['mark']
 
+    # with nothing to match against, or with two different numbers, the
+    # tile just becomes the new mark
     if mark is None or mark == spot or tiles[mark] != tiles[spot]:
         state['mark'] = spot
     else:
+        # the two numbers match, so both tiles stay face up
         hide[spot] = False
         hide[mark] = False
         state['mark'] = None
@@ -90,6 +94,7 @@ def draw():
 
     mark = state['mark']
 
+    # the marked tile is the only one showing its number
     if mark is not None and hide[mark]:
         x, y = xy(mark)
         up()
